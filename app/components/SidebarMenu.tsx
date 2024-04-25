@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faHeart, faShoppingCart, faCog, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faHeart, faShoppingCart, faCog, faPlusSquare, faPlateWheat, faBowlFood, faPerson } from '@fortawesome/free-solid-svg-icons';
 
 function SidebarMenu() {
   return (
@@ -14,20 +14,20 @@ function SidebarMenu() {
         </Link>
         <Link href="/create-dish">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
-            <FontAwesomeIcon icon={faPlusSquare} size="2x" className="text-xl text-green-500" />
+            <FontAwesomeIcon icon={faPlateWheat} size="2x" className="text-xl text-green-500" />
             <span className="absolute left-5 top-1/2 transform -translate-y-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 ml-14">Создать блюдо</span>
           </div>
         </Link>
-        <Link href="/favorites">
+        <Link href="/create-rations">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
-            <FontAwesomeIcon icon={faHeart} size="2x" className="text-xl text-green-500" />
-            <span className="absolute left-5 top-1/2 transform -translate-y-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 ml-14">Избранное</span>
+            <FontAwesomeIcon icon={faBowlFood} size="2x" className="text-xl text-green-500" />
+            <span className="absolute left-5 top-1/2 transform -translate-y-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 ml-14">Создать рацион</span>
           </div>
         </Link>
-        <Link href="/cart">
+        <Link href="/lk">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
-            <FontAwesomeIcon icon={faShoppingCart} size="2x" className="text-xl text-green-500" />
-            <span className="absolute left-5 top-1/2 transform -translate-y-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 ml-14">Корзина</span>
+            <FontAwesomeIcon icon={faPerson} size="2x" className="text-xl text-green-500 fa-duotone" />
+            <span className="absolute left-5 top-1/2 transform -translate-y-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 ml-14">Личный кабинет</span>
           </div>
         </Link>
         <Link href="/settings">
