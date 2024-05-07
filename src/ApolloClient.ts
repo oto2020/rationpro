@@ -5,7 +5,6 @@ const client = new ApolloClient({
     uri: 'https://ration.phys.su/graphql/',  // Укажите URL вашего GraphQL сервера
     headers: {
       'content-type': 'application/json'
-      // Добавьте здесь любые другие заголовки, которые вам нужны
     }
   }),
   cache: new InMemoryCache()
