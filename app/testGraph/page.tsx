@@ -6,14 +6,21 @@ import SidebarMenu from "../components/SidebarMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
-const SIMPLE_QUERY = gql`
-  query {
-    serverStatus
+const PRODUCT_CATEGORIES_QUERY = gql`
+  query getProductGategories {
+    productCategories {
+      id
+      name
+      desc
+      _count {
+        products
+      }
+    }
   }
 `;
 
 const PersonalCabinet = () => {
-  const { data, loading, error } = useQuery(SIMPLE_QUERY);
+  const { data, loading, error } = useQuery(PRODUCT_CATEGORIES_QUERY);
 
   React.useEffect(() => {
     if (!loading && data) {
