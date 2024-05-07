@@ -4,11 +4,8 @@ const client = new ApolloClient({
   link: new HttpLink({
     uri: 'https://ration.phys.su/graphql/',  // Укажите URL вашего GraphQL сервера
     headers: {
-      'content-type': 'application/json'
-<<<<<<< HEAD
-=======
-      // Добавьте здесь любые другие заголовки, которые вам нужны
->>>>>>> 36a96d6de79f406defd923d5e84deabd4c09ebb8
+      'content-type': 'application/json',
+      'api-key': "3ba0d6d83e335efcbe836df64ef713efd036628e8712fc09657bc8172ca867e8"
     }
   }),
   cache: new InMemoryCache()
