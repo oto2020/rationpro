@@ -9,10 +9,12 @@
     "lint": "next lint -p 3005"
   },
   "dependencies": {
+    "@apollo/client": "^3.10.2",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "graphql": "^16.8.1",
     "next": "14.2.2",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18",

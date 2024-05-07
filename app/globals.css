@@ -47,3 +47,12 @@ body {
     text-wrap: balance;
   }
 }
+html #nprogress .bar {
+  height: 5px; /* Изменение толщины индикатора */
+  background: rgb(68, 221, 34);
+}
+
+html #nprogress .peg {
+  box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+}
+
