@@ -1,33 +1,45 @@
-import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { onError } from "@apollo/client/link/error";
-import { createLoggerLink } from 'apollo-link-logger';
+// testGraph/page.tsx
+"use client";
+import React from "react";
+import { useQuery, gql } from "@apollo/client";
+import SidebarMenu from "../components/SidebarMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
-// Создаем ссылку на логгер
-const loggerLink = createLoggerLink();
+const SIMPLE_QUERY = gql`
+  query {
+    serverStatus
+  }
+`;
 
-// Создаем ссылку на ошибки
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    );
+const PersonalCabinet = () => {
+  const { data, loading, error } = useQuery(SIMPLE_QUERY);
 
-  if (networkError) console.log(`[Network error]: ${networkError}`);
-});
+  React.useEffect(() => {
+    if (!loading && data) {
+      console.log(data);
+    }
+    if (error) console.error(error);
+  }, [loading, data, error]);
 
-// Создаем HttpLink
-const httpLink = new HttpLink({
-  uri: 'https://ration.phys.su/graphql/',
-});
+  return (
+    <div className="flex min-h-screen bg-gray-200">
+      <SidebarMenu />
+      <div className="text-center mt-5 flex-grow">
+        {loading ? (
+          <FontAwesomeIcon
+            icon={faCircleNotch}
+            spin
+            className="text-6xl text-green-500"
+          />
+        ) : error ? (
+          <p>Error: {error.message}</p>
+        ) : (
+          <p>Server Status: {data.serverStatus}</p>
+        )}
+      </div>
+    </div>
+  );
+};
 
-// Используем все ссылки вместе
-const link = loggerLink.concat(errorLink).concat(httpLink);
-
-// Создаем клиент Apollo
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache(),
-});
+export default PersonalCabinet;
