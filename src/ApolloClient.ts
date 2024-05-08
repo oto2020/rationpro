@@ -5,7 +5,7 @@ const client = new ApolloClient({
     uri: 'https://ration.phys.su/graphql/',  // Укажите URL вашего GraphQL сервера
     headers: {
       'content-type': 'application/json',
-      'api-key': "3ba0d6d83e335efcbe836df64ef713efd036628e8712fc09657bc8172ca867e8"
+      'api-key': "b286af26d2c8ca15c934eb497484682a6fef3ec3d4dd50d2705ac2a764be35a8"
     }
   }),
   cache: new InMemoryCache()

@@ -9,7 +9,7 @@ function SidebarMenu() {
         <Link href="/">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
             <FontAwesomeIcon icon={faHome} size="2x" className="text-xl fa-beat text-green-500" />
-            <span className="absolute md:left-5 md:top-1/2 top-0 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Главная</span>
+            <span className="absolute md:left-5 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Главная</span>
           </div>
         </Link>
         <Link href="/create-dish">
