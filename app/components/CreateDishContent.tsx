@@ -16,7 +16,7 @@ const CreateDishContent = () => {
     const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <div className="p-2 ml-0 md:ml-28 w-full ">
+    <div className="p-2 ml-0 md:ml-28 w-full">
       <div className="bg-white p-2 rounded shadow-md">
         <div className="flex flex-wrap -mx-2">
           <div className="w-full md:w-1/2 px-2">
