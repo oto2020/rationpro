@@ -15,25 +15,25 @@ function SidebarMenu() {
         <Link href="/create-dish">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
             <FontAwesomeIcon icon={faPlateWheat} size="2x" className="text-xl text-green-500" />
-            <span className="absolute md:left-5 md:top-1/2 top-0 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Создать блюдо</span>
+            <span className="absolute md:left-5 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Создать блюдо</span>
           </div>
         </Link>
         <Link href="/create-rations">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
             <FontAwesomeIcon icon={faBowlFood} size="2x" className="text-xl text-green-500" />
-            <span className="absolute md:left-5 md:top-1/2 top-0 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Создать рацион</span>
+            <span className="absolute md:left-5 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Создать рацион</span>
           </div>
         </Link>
         <Link href="/lk">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
             <FontAwesomeIcon icon={faPerson} size="2x" className="text-xl text-green-500 fa-duotone" />
-            <span className="absolute md:left-5 md:top-1/2 top-0 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14">Личный кабинет</span>
+            <span className="absolute md:left-5 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14">Личный кабинет</span>
           </div>
         </Link>
         <Link href="/testGraph">
         <div className="group p-3 md:p-5 md:flex-grow w-full md:h-16 h-full hover:bg-gray-100 rounded relative">
             <FontAwesomeIcon icon={faCog} size="2x" className="text-xl text-green-500" />
-            <span className="absolute md:left-5 md:top-1/2 top-0 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Настройки</span>
+            <span className="absolute md:left-5 left-1/2 transform md:-translate-y-1/2 -translate-x-1/2 whitespace-nowrap hidden group-hover:flex justify-center items-center bg-gray-200 text-black text-sm p-2 rounded-lg shadow-lg z-50 w-32 md:ml-14 md:top-0 top-[calc(-100%-4px)]">Настройки</span>
           </div>
         </Link>
         

@@ -23,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   }, [searchTerm, onSearch]);
 
   return (
-    <div className="flex relative md:ml-28">
+    <div className="flex relative md:ml-28 p-2 mr-2">
       <input
         type="text"
         placeholder="Поиск"

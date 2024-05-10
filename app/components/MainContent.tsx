@@ -80,13 +80,13 @@ const MainContent: React.FC<MainContentProps> = ({ searchTerm, searchTriggered }
                 </div>
                 <div className="flex space-x-4 mt-4">
                   <button
-                    className={`py-2 px-4 rounded-lg ${activeButton === product.id.toString() ? "bg-green-700" : "bg-green-500"} text-white`}
+                    className={`text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ${activeButton === product.id.toString() ? "bg-green-700" : "bg-green-500"} text-white`}
                     onClick={() => setActiveButton(product.id.toString())}
                   >
                     Нутриенты
                   </button>
                   <button
-                    className="py-2 px-4 rounded-lg border border-gray-500 text-gray-500"
+                    className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
                     onClick={() => {
                       /* handle edit */
                     }}
