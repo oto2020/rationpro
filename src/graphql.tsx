@@ -2689,6 +2689,7 @@ export type NutrientWhereUniqueInput = {
 };
 
 export type Product = {
+  nutrients: any;
   __typename?: 'Product';
   _count?: Maybe<ProductCount>;
   categoryId: Scalars['Int']['output'];
