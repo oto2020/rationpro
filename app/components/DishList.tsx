@@ -2,23 +2,35 @@
 "use client"
 import React, { useState } from 'react';
 import {
-  useGetAllDishProductsQuery,
-  useGetProductsSkipTakeBguQuery,
-  useFindProductByNameBguQuery,
-  Dish
+  useGetAllDishProductsQuery
 } from "../../src/graphql";
+
+// Примерно определяем интерфейс, основываясь на предыдущих предложениях
+interface SimpleDishProduct {
+  productId: number;
+  cookCoeff: number;
+  quantity: number;
+  product: {
+    name: string;
+    productNutrients?: {
+      nutrient: {
+        name: string;
+      };
+      valueString?: string;
+    }[];
+  };
+}
 
 const DishList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data, loading, error } = useGetAllDishProductsQuery();
-  const { data: productsData, loading: productsLoading } = useGetProductsSkipTakeBguQuery({ variables: { skip: 0, take: 10 } });
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   // Функция для расчета КБЖУ продуктов в блюде
-  const calculateNutrients = (dishProducts: Dish['dishProducts']) => {
+  const calculateNutrients = (dishProducts: SimpleDishProduct[]) => {
     return dishProducts.reduce((acc, { product, cookCoeff, quantity }) => {
       product.productNutrients?.forEach(nutrient => {
         if (nutrient.valueString) {
@@ -42,7 +54,7 @@ const DishList = () => {
     }, { protein: 0, fat: 0, carbs: 0, calories: 0 });
   };
 
-  if (loading || productsLoading) return <p>Loading dishes or products...</p>;
+  if (loading) return <p>Loading dishes...</p>;
   if (error) return <p>Error loading dishes: {error.message}</p>;
 
   const filteredDishes = data?.dishes.filter(dish =>
@@ -60,7 +72,7 @@ const DishList = () => {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredDishes.map((dish) => {
-          const nutrients = calculateNutrients(dish.dishProducts);
+          const nutrients = calculateNutrients(dish.dishProducts as SimpleDishProduct[]);
           return (
             <div key={dish.id} className="bg-white p-4 rounded-lg shadow-md">
               <h3 className="font-bold text-xl mb-2 text-black">{dish.name}</h3>

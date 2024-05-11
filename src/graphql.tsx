@@ -2689,7 +2689,6 @@ export type NutrientWhereUniqueInput = {
 };
 
 export type Product = {
-  nutrients: any;
   __typename?: 'Product';
   _count?: Maybe<ProductCount>;
   categoryId: Scalars['Int']['output'];
@@ -5196,12 +5195,7 @@ export type GetAllDishNamesQuery = { __typename?: 'Query', dishes: Array<{ __typ
 export type GetAllDishProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllDishProductsQuery = { __typename?: 'Query', dishes: Array<{
-    calories: ReactNode;
-    carbs: ReactNode;
-    fat: ReactNode;
-    protein: ReactNode; __typename?: 'Dish', id: number, name: string, description?: string | null, dishProducts: Array<{ __typename?: 'DishProduct', productId: number, cookCoeff: number, quantity: number, product: { __typename?: 'Product', name: string } }> 
-}> };
+export type GetAllDishProductsQuery = { __typename?: 'Query', dishes: Array<{ __typename?: 'Dish', id: number, name: string, description?: string | null, dishProducts: Array<{ __typename?: 'DishProduct', productId: number, cookCoeff: number, quantity: number, product: { __typename?: 'Product', name: string } }> }> };
 
 export type FindProductByNameBguQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']['input']>;
