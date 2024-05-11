@@ -182,80 +182,55 @@ const CreateDishContent = () => {
             </div>
           </div>
           <div className="w-full md:w-1/2 px-2">
-            <div className="p-2 rounded-lg shadow bg-green-100">
-              <h3 className="text-lg font-bold mb-4 text-black">
-                Выбранные продукты:
-              </h3>
-              <div className="overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300">
-              {selectedProducts.map((product) => (
-  <div
-    key={product.id}
-    className="p-3 bg-white mb-2 rounded-lg shadow flex flex-col md:flex-row justify-between items-center text-black"
-  >
-    <span className="w-full md:w-auto md:max-w-[60%]">{product.name}</span>
-    <div className="w-full md:w-auto flex items-center justify-between mt-2 md:mt-0">
-      <input
-        type="number"
-        value={product.grams}
-        onChange={(e) =>
-          handleGramsChange(
-            product.id.toString(),
-            Number(e.target.value)
-          )
-        }
-        className="w-20 border rounded text-black p-1 text-center"
-      />
-      <span className="text-sm">
-        Белки: {calculateNutrients(product).protein.toFixed(2)}г,
-        Жиры: {calculateNutrients(product).fat.toFixed(2)}г,
-        Углеводы: {calculateNutrients(product).carbs.toFixed(2)}г,
-        ккал: {calculateNutrients(product).calories.toFixed(2)}
-      </span>
-      <button
-        onClick={() => toggleProductSelection(product)}
-        className="ml-2"
-      >
-        <FontAwesomeIcon
-          icon={faTimes}
-          className="text-red-500"
-        />
-      </button>
+  <div className="p-2 rounded-lg shadow bg-green-100">
+    <h3 className="text-lg font-bold mb-4 text-black">Выбранные продукты:</h3>
+    <div className="overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300">
+      {selectedProducts.map((product) => (
+        <div key={product.id} className="p-3 bg-white mb-2 rounded-lg shadow flex flex-col md:flex-row justify-between items-center text-black">
+          <span className="w-full md:w-auto md:max-w-[60%]">{product.name}</span>
+          <div className="flex flex-col md:flex-row md:space-x-4 w-full">
+            <input
+              type="number"
+              value={product.grams}
+              onChange={(e) => handleGramsChange(product.id.toString(), Number(e.target.value))}
+              className="w-20 border rounded text-black p-1 text-center mb-2 md:mb-0"
+            />
+            <div className="flex flex-wrap justify-between text-sm">
+              <span className="w-1/2 mb-2 md:mb-0">Белки: {calculateNutrients(product).protein.toFixed(2)}г</span>
+              <span className="w-1/2 mb-2 md:mb-0">Жиры: {calculateNutrients(product).fat.toFixed(2)}г</span>
+              <span className="w-1/2">Углеводы: {calculateNutrients(product).carbs.toFixed(2)}г</span>
+              <span className="w-1/2">ккал: {calculateNutrients(product).calories.toFixed(2)}</span>
+            </div>
+            <button onClick={() => toggleProductSelection(product)} className="ml-2">
+              <FontAwesomeIcon icon={faTimes} className="text-red-500" />
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div className="flex space-x-2 mb-4">
+      {Object.keys(COOKING_METHODS).map((method) => {
+        const cookingMethodKey = method as CookingMethods;
+        return (
+          <button key={cookingMethodKey} className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group ${cookingMethod === cookingMethodKey ? "bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white" : "text-gray-900 bg-white"} focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800`} onClick={() => setCookingMethod(cookingMethodKey)}>
+            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">{cookingMethodKey}</span>
+          </button>
+        );
+      })}
+    </div>
+    <div className="p-2 bg-white mt-2 rounded-lg shadow flex justify-between items-center text-black">
+      <span>Всего:</span>
+      <div className="flex flex-wrap w-full">
+        <span className="w-1/2">Белки: {calculateTotalNutrients().protein.toFixed(2)}г</span>
+        <span className="w-1/2">Жиры: {calculateTotalNutrients().fat.toFixed(2)}г</span>
+        <span className="w-1/2">Углеводы: {calculateTotalNutrients().carbs.toFixed(2)}г</span>
+        <span className="w-1/2">ккал: {calculateTotalNutrients().calories.toFixed(2)}</span>
+      </div>
     </div>
   </div>
-))}
+</div>
 
-              </div>
-              <div className="flex space-x-2 mb-4">
-                {Object.keys(COOKING_METHODS).map((method) => {
-                  const cookingMethodKey = method as CookingMethods;
-                  return (
-                    <button
-                      key={cookingMethodKey}
-                      className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group ${
-                        cookingMethod === cookingMethodKey
-                          ? "bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white"
-                          : "text-gray-900 bg-white"
-                      } focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800`}
-                      onClick={() => setCookingMethod(cookingMethodKey)}
-                    >
-                      <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                        {cookingMethodKey}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="p-2 bg-white mt-2 rounded-lg shadow flex justify-between items-center text-black">
-                <span>Всего:</span>
-                <span className="ml-auto text-sm">
-                  Белки: {calculateTotalNutrients().protein.toFixed(2)}г, Жиры:{" "}
-                  {calculateTotalNutrients().fat.toFixed(2)}г, Углеводы:{" "}
-                  {calculateTotalNutrients().carbs.toFixed(2)}г, ккал:{" "}
-                  {calculateTotalNutrients().calories.toFixed(2)}
-                </span>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
