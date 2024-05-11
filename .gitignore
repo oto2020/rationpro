@@ -17,7 +17,7 @@
 /build
 
 # GraphQL
-src/graphql.tsx
+/src/graphql.tsx
 
 # misc
 .DS_Store
