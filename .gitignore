@@ -16,6 +16,9 @@
 # production
 /build
 
+# GraphQL
+src/graphql.tsx
+
 # misc
 .DS_Store
 *.pem
