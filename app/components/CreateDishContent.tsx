@@ -8,7 +8,7 @@ import {
   faCheck,
   faCircleNotch,
 } from "@fortawesome/free-solid-svg-icons";
-import { useFindProductByNameBguQuery, Product } from "../../src/graphql";
+import { useFindProductByNameBguQuery, useCreateDishMutation, Product } from "../../src/graphql";
 
 interface NutrientInfo {
   protein: number;
@@ -30,16 +30,16 @@ const COOKING_METHODS: Record<CookingMethods, number> = {
   Запекать: 1.1,
 };
 
-
 const CreateDishContent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [displayResults, setDisplayResults] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
-    []
-  );
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
   const [cookingMethod, setCookingMethod] = useState<CookingMethods>("Ничего");
+  const [dishName, setDishName] = useState("");
+  const [dishDescription, setDishDescription] = useState("");
+  const [createDishMutation, { loading, error }] = useCreateDishMutation();
 
-  const { data, loading } = useFindProductByNameBguQuery({
+  const { data, loading: searchLoading } = useFindProductByNameBguQuery({
     variables: { term: searchTerm },
     skip: searchTerm.length < 1,
   });
@@ -55,24 +55,32 @@ const CreateDishContent = () => {
     setSearchTerm(event.target.value);
   };
 
-  const calculateTotalNutrients = (): NutrientInfo => {
-    let totalProtein = 0,
-      totalFat = 0,
-      totalCarbs = 0,
-      totalCalories = 0;
-    selectedProducts.forEach((product) => {
-      const nutrients = calculateNutrients(product);
-      totalProtein += nutrients.protein;
-      totalFat += nutrients.fat;
-      totalCarbs += nutrients.carbs;
-      totalCalories += nutrients.calories;
-    });
-    return {
-      protein: totalProtein,
-      fat: totalFat,
-      carbs: totalCarbs,
-      calories: totalCalories,
-    };
+  const handleCreateDish = async () => {
+    const dishProducts = selectedProducts.map(product => ({
+      productId: product.id,
+      quantity: product.grams,
+      cookCoeff: COOKING_METHODS[cookingMethod]
+    }));
+    try {
+      const result = await createDishMutation({
+        variables: {
+          data: {
+            name: dishName,
+            description: dishDescription,
+            dishProducts: {
+              createMany: {
+                data: dishProducts
+              }
+            }
+          }
+        }
+      });
+      if (result.data) {
+        alert('Dish created successfully!');
+      }
+    } catch (error) {
+      alert('Failed to create dish: ' + (error instanceof Error ? error.message : String(error)));
+    }
   };
 
   const toggleProductSelection = (product: Product) => {
@@ -85,10 +93,6 @@ const CreateDishContent = () => {
     setDisplayResults(false);
   };
 
-  const handleCloseResults = () => {
-    setDisplayResults(false);
-  };
-
   const handleGramsChange = (id: string, grams: number) => {
     setSelectedProducts((prev) =>
       prev.map((product) =>
@@ -97,10 +101,21 @@ const CreateDishContent = () => {
     );
   };
 
+  const calculateTotalNutrients = (): NutrientInfo => {
+    return selectedProducts.reduce((acc, product) => {
+      const nutrients = calculateNutrients(product);
+      acc.protein += nutrients.protein;
+      acc.fat += nutrients.fat;
+      acc.carbs += nutrients.carbs;
+      acc.calories += nutrients.calories;
+      return acc;
+    }, { protein: 0, fat: 0, carbs: 0, calories: 0 });
+  };
+
   const calculateNutrients = (product: SelectedProduct): NutrientInfo => {
-    let protein = 0,
-      fat = 0,
-      carbs = 0;
+    const gramsFactor = product.grams / 100;
+    const cookingFactor = COOKING_METHODS[cookingMethod];
+    let protein = 0, fat = 0, carbs = 0;
     product.productNutrients.forEach((nutrient) => {
       switch (nutrient.nutrient.name) {
         case "Белки":
@@ -114,14 +129,11 @@ const CreateDishContent = () => {
           break;
       }
     });
-    const gramsFactor = product.grams / 100;
-    const cookingFactor = COOKING_METHODS[cookingMethod];
     return {
       protein: protein * gramsFactor * cookingFactor,
       fat: fat * gramsFactor * cookingFactor,
       carbs: carbs * gramsFactor * cookingFactor,
-      calories:
-        (protein * 4 + fat * 9 + carbs * 4) * gramsFactor * cookingFactor,
+      calories: (protein * 4 + fat * 9 + carbs * 4) * gramsFactor * cookingFactor,
     };
   };
 
@@ -144,7 +156,7 @@ const CreateDishContent = () => {
               />
               {displayResults && (
                 <div className="absolute bg-white w-full border rounded mt-10 max-h-60 overflow-auto z-10">
-                  {loading ? (
+                  {searchLoading ? (
                     <FontAwesomeIcon
                       icon={faCircleNotch}
                       spin
@@ -154,16 +166,14 @@ const CreateDishContent = () => {
                     <>
                       <button
                         className="p-2 w-full text-left text-red-500"
-                        onClick={handleCloseResults}
+                        onClick={() => setDisplayResults(false)}
                       >
                         <FontAwesomeIcon icon={faWindowClose} /> Закрыть
                       </button>
                       {data?.products.slice(0, 30).map((product) => (
                         <div
                           key={product.id}
-                          onClick={() =>
-                            toggleProductSelection(product as Product)
-                          }
+                          onClick={() => toggleProductSelection(product as Product)}
                           className="p-2 hover:bg-gray-100 flex justify-between items-center text-black"
                         >
                           <span>{product.name}</span>
@@ -183,58 +193,80 @@ const CreateDishContent = () => {
             </div>
           </div>
           <div className="w-full md:w-1/2 px-2">
-  <div className="p-2 rounded-lg shadow bg-green-100">
-    <h3 className="text-lg font-bold mb-4 text-black">Выбранные продукты:</h3>
-    <div className="overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300">
-      {selectedProducts.map((product) => (
-        <div key={product.id} className="p-3 bg-white mb-2 rounded-lg shadow flex flex-col md:flex-row justify-between items-center text-black">
-          <span className="w-full md:w-auto md:max-w-[60%]">{product.name}</span>
-          <div className="flex flex-col md:flex-row md:space-x-4 w-full">
-            <input
-              type="number"
-              value={product.grams}
-              onChange={(e) => handleGramsChange(product.id.toString(), Number(e.target.value))}
-              className="w-20 border rounded text-black p-1 text-center mb-2 md:mb-0"
-            />
-            <div className="flex flex-wrap justify-between text-sm">
-              <span className="w-1/2 mb-2 md:mb-0 text-gray-500 text-sm">Белки: {calculateNutrients(product).protein.toFixed(2)}г</span>
-              <span className="w-1/2 mb-2 md:mb-0 text-gray-500 text-sm">Жиры: {calculateNutrients(product).fat.toFixed(2)}г</span>
-              <span className="w-1/2 text-gray-500 text-sm">Углеводы: {calculateNutrients(product).carbs.toFixed(2)}г</span>
-              <span className="w-1/2 text-gray-500 text-sm">ккал: {calculateNutrients(product).calories.toFixed(2)}</span>
+            <div className="p-2 rounded-lg shadow bg-green-100">
+              <h3 className="text-lg font-bold mb-4 text-black">Выбранные продукты:</h3>
+              <div className="overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300">
+                {selectedProducts.map((product) => (
+                  <div key={product.id} className="p-3 bg-white mb-2 rounded-lg shadow flex flex-col md:flex-row justify-between items-center text-black">
+                    <span className="w-full md:w-auto md:max-w-[60%]">{product.name}</span>
+                    <div className="flex flex-col md:flex-row md:space-x-4 w-full">
+                      <input
+                        type="number"
+                        value={product.grams}
+                        onChange={(e) => handleGramsChange(product.id.toString(), Number(e.target.value))}
+                        className="w-20 border rounded text-black p-1 text-center mb-2 md:mb-0"
+                      />
+                      <div className="flex flex-wrap justify-between text-sm">
+                        <span className="w-1/2 mb-2 md:mb-0 text-gray-500 text-sm">Белки: {calculateNutrients(product).protein.toFixed(2)}г</span>
+                        <span className="w-1/2 mb-2 md:mb-0 text-gray-500 text-sm">Жиры: {calculateNutrients(product).fat.toFixed(2)}г</span>
+                        <span className="w-1/2 text-gray-500 text-sm">Углеводы: {calculateNutrients(product).carbs.toFixed(2)}г</span>
+                        <span className="w-1/2 text-gray-500 text-sm">ккал: {calculateNutrients(product).calories.toFixed(2)}</span>
+                      </div>
+                      <button onClick={() => toggleProductSelection(product)} className="md:ml-2">
+                        <FontAwesomeIcon icon={faTimes} className="text-white bg-gradient-to-br from-green-400 to-blue-600 w-full rounded py-2 mt-1 group-hover:from-green-400 group-hover:to-blue-600" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex space-x-2 mb-4">
+                {Object.keys(COOKING_METHODS).map((method) => {
+                  const cookingMethodKey = method as CookingMethods;
+                  return (
+                    <button key={cookingMethodKey} className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group ${cookingMethod === cookingMethodKey ? "bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white" : "text-gray-900 bg-white"} focus:ring-4 focus:outline-none`} onClick={() => setCookingMethod(cookingMethodKey)}>
+                      <span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md">{cookingMethodKey}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="p-2 bg-white mt-2 rounded-lg shadow flex flex-col justify-between items-start text-black">
+                <span>Всего:</span>
+                <div className="flex w-full">
+                  <div className="flex flex-wrap w-full">
+                    <span className="w-1/2 text-gray-500 text-sm">Белки: {calculateTotalNutrients().protein.toFixed(2)}г</span>
+                    <span className="w-1/2 text-gray-500 text-sm">Жиры: {calculateTotalNutrients().fat.toFixed(2)}г</span>
+                    <span className="w-1/2 text-gray-500 text-sm">Углеводы: {calculateTotalNutrients().carbs.toFixed(2)}г</span>
+                    <span className="w-1/2 text-gray-500 text-sm">ккал: {calculateTotalNutrients().calories.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <button onClick={() => toggleProductSelection(product)} className="md:ml-2">
-              <FontAwesomeIcon icon={faTimes} className="text-white bg-gradient-to-br from-green-400 to-blue-600 w-full rounded py-2 mt-1 group-hover:from-green-400 group-hover:to-blue-600" />
-            </button>
           </div>
         </div>
-      ))}
-    </div>
-    <div className="flex space-x-2 mb-4">
-      {Object.keys(COOKING_METHODS).map((method) => {
-        const cookingMethodKey = method as CookingMethods;
-        return (
-          <button key={cookingMethodKey} className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group ${cookingMethod === cookingMethodKey ? "bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white" : "text-gray-900 bg-white"} focus:ring-4 focus:outline-none`} onClick={() => setCookingMethod(cookingMethodKey)}>
-            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md">{cookingMethodKey}</span>
-          </button>
-        );
-      })}
-    </div>
-    <div className="p-2 bg-white mt-2 rounded-lg shadow flex flex-col justify-between items-start text-black">
-  <span>Всего:</span>
-  <div className="flex w-full">
-    <div className="flex flex-wrap w-full">
-      <span className="w-1/2 text-gray-500 text-sm">Белки: {calculateTotalNutrients().protein.toFixed(2)}г</span>
-      <span className="w-1/2 text-gray-500 text-sm">Жиры: {calculateTotalNutrients().fat.toFixed(2)}г</span>
-      <span className="w-1/2 text-gray-500 text-sm">Углеводы: {calculateTotalNutrients().carbs.toFixed(2)}г</span>
-      <span className="w-1/2 text-gray-500 text-sm">ккал: {calculateTotalNutrients().calories.toFixed(2)}</span>
-    </div>
-  </div>
-</div>
-  </div>
-</div>
-
-
+        {/* Dish Name and Description Inputs */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Название блюда"
+            className="w-full p-2 border rounded mb-2"
+            value={dishName}
+            onChange={(e) => setDishName(e.target.value)}
+          />
+          <textarea
+            placeholder="Описание блюда"
+            className="w-full p-2 border rounded"
+            value={dishDescription}
+            onChange={(e) => setDishDescription(e.target.value)}
+          />
         </div>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={handleCreateDish}
+          disabled={loading}
+        >
+          Создать блюдо
+        </button>
+        {error && <p className="text-red-500">Error: {error.message}</p>}
       </div>
     </div>
   );

@@ -5166,6 +5166,42 @@ export type StringWithAggregatesFilter = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateDishMutationVariables = Exact<{
+  data: DishCreateInput;
+}>;
+
+
+export type CreateDishMutation = { __typename?: 'Mutation', createOneDish: { __typename?: 'Dish', id: number, name: string, description?: string | null } };
+
+export type FindProductIdByNameQueryVariables = Exact<{
+  term?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type FindProductIdByNameQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: number, name: string }> };
+
+export type FindProductInfoByIdQueryVariables = Exact<{
+  productId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type FindProductInfoByIdQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: number, name: string, productCategory: { __typename?: 'ProductCategory', name: string }, productMeasures: Array<{ __typename?: 'ProductMeasure', name: string, desc?: string | null, value: number }>, productClearWeights: Array<{ __typename?: 'ProductClearWeight', value: number }>, productNutrients: Array<{ __typename?: 'ProductNutrient', nutrientId: string, valueAmount: number, valueExponent: number, valueString?: string | null, nutrient: { __typename?: 'Nutrient', name: string, categoryId: number, nutrientCategory: { __typename?: 'NutrientCategory', name: string } } }> }> };
+
+export type GetAllDishNamesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllDishNamesQuery = { __typename?: 'Query', dishes: Array<{ __typename?: 'Dish', id: number, name: string, description?: string | null }> };
+
+export type GetAllDishProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllDishProductsQuery = { __typename?: 'Query', dishes: Array<{
+    calories: ReactNode;
+    carbs: ReactNode;
+    fat: ReactNode;
+    protein: ReactNode; __typename?: 'Dish', id: number, name: string, description?: string | null, dishProducts: Array<{ __typename?: 'DishProduct', productId: number, cookCoeff: number, quantity: number, product: { __typename?: 'Product', name: string } }> 
+}> };
+
 export type FindProductByNameBguQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -5187,6 +5223,237 @@ export type GetProductsSkipTakeBguQueryVariables = Exact<{
 export type GetProductsSkipTakeBguQuery = { __typename?: 'Query', products: Array<{ __typename?: 'Product', id: number, name: string, categoryId: number, productNutrients: Array<{ __typename?: 'ProductNutrient', id: number, valueString?: string | null, valueAmount: number, valueExponent: number, productId: number, nutrientId: string, nutrient: { __typename?: 'Nutrient', id: string, name: string, categoryId: number } }> }> };
 
 
+export const CreateDishDocument = gql`
+    mutation CreateDish($data: DishCreateInput!) {
+  createOneDish(data: $data) {
+    id
+    name
+    description
+  }
+}
+    `;
+export type CreateDishMutationFn = Apollo.MutationFunction<CreateDishMutation, CreateDishMutationVariables>;
+
+/**
+ * __useCreateDishMutation__
+ *
+ * To run a mutation, you first call `useCreateDishMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDishMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDishMutation, { data, loading, error }] = useCreateDishMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateDishMutation(baseOptions?: Apollo.MutationHookOptions<CreateDishMutation, CreateDishMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDishMutation, CreateDishMutationVariables>(CreateDishDocument, options);
+      }
+export type CreateDishMutationHookResult = ReturnType<typeof useCreateDishMutation>;
+export type CreateDishMutationResult = Apollo.MutationResult<CreateDishMutation>;
+export type CreateDishMutationOptions = Apollo.BaseMutationOptions<CreateDishMutation, CreateDishMutationVariables>;
+export const FindProductIdByNameDocument = gql`
+    query FindProductIdByName($term: String) {
+  products(where: {name: {contains: $term}}) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindProductIdByNameQuery__
+ *
+ * To run a query within a React component, call `useFindProductIdByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductIdByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindProductIdByNameQuery({
+ *   variables: {
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useFindProductIdByNameQuery(baseOptions?: Apollo.QueryHookOptions<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>(FindProductIdByNameDocument, options);
+      }
+export function useFindProductIdByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>(FindProductIdByNameDocument, options);
+        }
+export function useFindProductIdByNameSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>(FindProductIdByNameDocument, options);
+        }
+export type FindProductIdByNameQueryHookResult = ReturnType<typeof useFindProductIdByNameQuery>;
+export type FindProductIdByNameLazyQueryHookResult = ReturnType<typeof useFindProductIdByNameLazyQuery>;
+export type FindProductIdByNameSuspenseQueryHookResult = ReturnType<typeof useFindProductIdByNameSuspenseQuery>;
+export type FindProductIdByNameQueryResult = Apollo.QueryResult<FindProductIdByNameQuery, FindProductIdByNameQueryVariables>;
+export const FindProductInfoByIdDocument = gql`
+    query FindProductInfoById($productId: Int) {
+  products(where: {id: {equals: $productId}}) {
+    id
+    name
+    productCategory {
+      name
+    }
+    productMeasures {
+      name
+      desc
+      value
+    }
+    productClearWeights {
+      value
+    }
+    productNutrients {
+      nutrientId
+      nutrient {
+        name
+        categoryId
+        nutrientCategory {
+          name
+        }
+      }
+      valueAmount
+      valueExponent
+      valueString
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindProductInfoByIdQuery__
+ *
+ * To run a query within a React component, call `useFindProductInfoByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductInfoByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindProductInfoByIdQuery({
+ *   variables: {
+ *      productId: // value for 'productId'
+ *   },
+ * });
+ */
+export function useFindProductInfoByIdQuery(baseOptions?: Apollo.QueryHookOptions<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>(FindProductInfoByIdDocument, options);
+      }
+export function useFindProductInfoByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>(FindProductInfoByIdDocument, options);
+        }
+export function useFindProductInfoByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>(FindProductInfoByIdDocument, options);
+        }
+export type FindProductInfoByIdQueryHookResult = ReturnType<typeof useFindProductInfoByIdQuery>;
+export type FindProductInfoByIdLazyQueryHookResult = ReturnType<typeof useFindProductInfoByIdLazyQuery>;
+export type FindProductInfoByIdSuspenseQueryHookResult = ReturnType<typeof useFindProductInfoByIdSuspenseQuery>;
+export type FindProductInfoByIdQueryResult = Apollo.QueryResult<FindProductInfoByIdQuery, FindProductInfoByIdQueryVariables>;
+export const GetAllDishNamesDocument = gql`
+    query GetAllDishNames {
+  dishes {
+    id
+    name
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetAllDishNamesQuery__
+ *
+ * To run a query within a React component, call `useGetAllDishNamesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllDishNamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllDishNamesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllDishNamesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>(GetAllDishNamesDocument, options);
+      }
+export function useGetAllDishNamesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>(GetAllDishNamesDocument, options);
+        }
+export function useGetAllDishNamesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>(GetAllDishNamesDocument, options);
+        }
+export type GetAllDishNamesQueryHookResult = ReturnType<typeof useGetAllDishNamesQuery>;
+export type GetAllDishNamesLazyQueryHookResult = ReturnType<typeof useGetAllDishNamesLazyQuery>;
+export type GetAllDishNamesSuspenseQueryHookResult = ReturnType<typeof useGetAllDishNamesSuspenseQuery>;
+export type GetAllDishNamesQueryResult = Apollo.QueryResult<GetAllDishNamesQuery, GetAllDishNamesQueryVariables>;
+export const GetAllDishProductsDocument = gql`
+    query GetAllDishProducts {
+  dishes {
+    id
+    name
+    description
+    dishProducts {
+      productId
+      product {
+        name
+      }
+      cookCoeff
+      quantity
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllDishProductsQuery__
+ *
+ * To run a query within a React component, call `useGetAllDishProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllDishProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllDishProductsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllDishProductsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>(GetAllDishProductsDocument, options);
+      }
+export function useGetAllDishProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>(GetAllDishProductsDocument, options);
+        }
+export function useGetAllDishProductsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>(GetAllDishProductsDocument, options);
+        }
+export type GetAllDishProductsQueryHookResult = ReturnType<typeof useGetAllDishProductsQuery>;
+export type GetAllDishProductsLazyQueryHookResult = ReturnType<typeof useGetAllDishProductsLazyQuery>;
+export type GetAllDishProductsSuspenseQueryHookResult = ReturnType<typeof useGetAllDishProductsSuspenseQuery>;
+export type GetAllDishProductsQueryResult = Apollo.QueryResult<GetAllDishProductsQuery, GetAllDishProductsQueryVariables>;
 export const FindProductByNameBguDocument = gql`
     query FindProductByNameBgu($term: String) {
   products(where: {name: {contains: $term}}) {

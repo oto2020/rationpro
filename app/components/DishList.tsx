@@ -1,6 +1,7 @@
 // components/DishList.tsx
 "use client"
 import React, { useState } from 'react';
+import { useGetAllDishProductsQuery } from "../../src/graphql";  // Importing the GraphQL query hook
 
 interface Dish {
   id: number;
@@ -11,24 +12,23 @@ interface Dish {
   calories: number;
 }
 
-const initialDishes: Dish[] = Array(5).fill({
-  id: 1,
-  name: "Тестовое блюдо",
-  protein: 20,
-  fat: 10,
-  carbs: 15,
-  calories: 250
-});
-
 const DishList = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [dishes, setDishes] = useState(initialDishes);
+  
+  // Using the GraphQL query to fetch dishes
+  const { data, loading, error } = useGetAllDishProductsQuery();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredDishes = dishes.filter(dish => dish.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Filtering dishes based on search term
+  const filteredDishes = data?.dishes.filter(dish => 
+    dish.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
+
+  if (loading) return <p>Loading dishes...</p>;
+  if (error) return <p>Error loading dishes: {error.message}</p>;
 
   return (
     <div className="flex-1 p-2 ml-0 md:ml-28 mb-12 md:mb-0">
