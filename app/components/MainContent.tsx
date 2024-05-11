@@ -34,7 +34,7 @@ const MainContent: React.FC<MainContentProps> = ({ searchTerm, searchTriggered }
     return <ProductAdd goBack={() => setIsAdding(false)} />;
   }
 
-  if (loading || searchLoading) return <FontAwesomeIcon icon={faCircleNotch} spin className="text-6xl text-green-500"/>;
+  if (loading || searchLoading) return <div className="text-center"><FontAwesomeIcon icon={faCircleNotch} spin className="text-6xl text-green-500"/></div>;
 
   const productList = searchTriggered ? searchData?.products : data?.products;
 

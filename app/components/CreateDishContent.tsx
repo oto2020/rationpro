@@ -30,6 +30,7 @@ const COOKING_METHODS: Record<CookingMethods, number> = {
   Запекать: 1.1,
 };
 
+
 const CreateDishContent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [displayResults, setDisplayResults] = useState(false);
@@ -142,7 +143,7 @@ const CreateDishContent = () => {
                 className="text-gray-400 absolute top-1/2 left-3 transform -translate-y-1/2"
               />
               {displayResults && (
-                <div className="absolute bg-white w-full border rounded mt-10 max-h-60 overflow-auto">
+                <div className="absolute bg-white w-full border rounded mt-10 max-h-60 overflow-auto z-10">
                   {loading ? (
                     <FontAwesomeIcon
                       icon={faCircleNotch}
@@ -196,13 +197,13 @@ const CreateDishContent = () => {
               className="w-20 border rounded text-black p-1 text-center mb-2 md:mb-0"
             />
             <div className="flex flex-wrap justify-between text-sm">
-              <span className="w-1/2 mb-2 md:mb-0">Белки: {calculateNutrients(product).protein.toFixed(2)}г</span>
-              <span className="w-1/2 mb-2 md:mb-0">Жиры: {calculateNutrients(product).fat.toFixed(2)}г</span>
-              <span className="w-1/2">Углеводы: {calculateNutrients(product).carbs.toFixed(2)}г</span>
-              <span className="w-1/2">ккал: {calculateNutrients(product).calories.toFixed(2)}</span>
+              <span className="w-1/2 mb-2 md:mb-0 text-gray-500 text-sm">Белки: {calculateNutrients(product).protein.toFixed(2)}г</span>
+              <span className="w-1/2 mb-2 md:mb-0 text-gray-500 text-sm">Жиры: {calculateNutrients(product).fat.toFixed(2)}г</span>
+              <span className="w-1/2 text-gray-500 text-sm">Углеводы: {calculateNutrients(product).carbs.toFixed(2)}г</span>
+              <span className="w-1/2 text-gray-500 text-sm">ккал: {calculateNutrients(product).calories.toFixed(2)}</span>
             </div>
-            <button onClick={() => toggleProductSelection(product)} className="ml-2">
-              <FontAwesomeIcon icon={faTimes} className="text-red-500" />
+            <button onClick={() => toggleProductSelection(product)} className="md:ml-2">
+              <FontAwesomeIcon icon={faTimes} className="text-white bg-gradient-to-br from-green-400 to-blue-600 w-full rounded py-2 mt-1 group-hover:from-green-400 group-hover:to-blue-600" />
             </button>
           </div>
         </div>
@@ -213,20 +214,22 @@ const CreateDishContent = () => {
         const cookingMethodKey = method as CookingMethods;
         return (
           <button key={cookingMethodKey} className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group ${cookingMethod === cookingMethodKey ? "bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white" : "text-gray-900 bg-white"} focus:ring-4 focus:outline-none`} onClick={() => setCookingMethod(cookingMethodKey)}>
-            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">{cookingMethodKey}</span>
+            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md">{cookingMethodKey}</span>
           </button>
         );
       })}
     </div>
-    <div className="p-2 bg-white mt-2 rounded-lg shadow flex justify-between items-center text-black">
-      <span>Всего:</span>
-      <div className="flex flex-wrap w-full">
-        <span className="w-1/2">Белки: {calculateTotalNutrients().protein.toFixed(2)}г</span>
-        <span className="w-1/2">Жиры: {calculateTotalNutrients().fat.toFixed(2)}г</span>
-        <span className="w-1/2">Углеводы: {calculateTotalNutrients().carbs.toFixed(2)}г</span>
-        <span className="w-1/2">ккал: {calculateTotalNutrients().calories.toFixed(2)}</span>
-      </div>
+    <div className="p-2 bg-white mt-2 rounded-lg shadow flex flex-col justify-between items-start text-black">
+  <span>Всего:</span>
+  <div className="flex w-full">
+    <div className="flex flex-wrap w-full">
+      <span className="w-1/2 text-gray-500 text-sm">Белки: {calculateTotalNutrients().protein.toFixed(2)}г</span>
+      <span className="w-1/2 text-gray-500 text-sm">Жиры: {calculateTotalNutrients().fat.toFixed(2)}г</span>
+      <span className="w-1/2 text-gray-500 text-sm">Углеводы: {calculateTotalNutrients().carbs.toFixed(2)}г</span>
+      <span className="w-1/2 text-gray-500 text-sm">ккал: {calculateTotalNutrients().calories.toFixed(2)}</span>
     </div>
+  </div>
+</div>
   </div>
 </div>
 
